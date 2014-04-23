@@ -3,6 +3,7 @@ require "noodles/utils"
 require "noodles/dependencies"
 require "noodles/controller"
 require "noodles/routing"
+require "noodles/file_model"
 
 module Noodles
   class Application
