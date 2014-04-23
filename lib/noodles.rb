@@ -1,6 +1,8 @@
 require "noodles/version"
 require "noodles/utils"
 require "noodles/dependencies"
+require "noodles/controller"
+require "noodles/routing"
 
 module Noodles
   class Application
@@ -16,20 +18,5 @@ module Noodles
       text = controller.send(action)
       [200, {'Content-Type' => 'text/html'}, [text]]
     end
-
-    def get_controller_and_action(env)
-        _, controller, action, after = env['PATH_INFO'].split('/', 4)
-      controller = controller.capitalize
-      controller += 'Controller'
-      [Object.const_get(controller), action]
-    end
   end
-
-  class Controller
-    attr_reader :env
-    def initialize(env)
-      @env = env
-    end
-  end
-
 end
