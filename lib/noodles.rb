@@ -17,7 +17,15 @@ module Noodles
       klass, action = get_controller_and_action(env)
       controller = klass.new(env)
       text = controller.send(action)
-      [200, {'Content-Type' => 'text/html'}, [text]]
+      if controller.get_response
+        format_response(controller.get_response)
+      else
+        [200, {'Content-Type' => 'text/html'}, [text]]
+      end
+    end
+
+    def format_response(response)
+      [response.status, response.headers, response.body]
     end
   end
 end

@@ -6,4 +6,4 @@ It has <%= whatever %>.
 TEMPLATE
 
 eruby = Erubis::Eruby.new(template)
-puts eruby.result(whatever: "ponies")
+eruby.result(whatever: "ponies")
