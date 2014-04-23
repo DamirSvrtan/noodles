@@ -1,0 +1,1 @@
+script: "ruby test/test_application.rb"
