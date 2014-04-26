@@ -9,15 +9,23 @@ module Noodles
       @env = env
     end
 
-    def render(view_name)
-      filename = rendering_path(view_name)
-      template = File.read(filename)
-      Erubis::Eruby.new(template).result(mapped_instance_variables)
+    def render(template={})
+      if template.has_key? :html
+        filename = get_rendering_path template[:html], :html
+        File.read(filename)
+      elsif template.has_key? :erb
+        filename = get_rendering_path template[:erb], :erb
+        template = File.read(filename)
+        Erubis::Eruby.new(template).result(mapped_instance_variables)
+      elsif template.has_key? :haml
+
+      elsif template.has_key? :slim
+
+      end
     end
 
-
-    def rendering_path(view_name)
-      File.join 'app', 'views', controller_name, "#{view_name}.html.erb"
+    def get_rendering_path(view_name, template_type)
+      File.join 'app', 'views', controller_name, "#{view_name}.#{template_type}"
     end
 
     def request
@@ -27,7 +35,6 @@ module Noodles
     def params
       request.params
     end
-
 
     def response(body, status = 200, headers={})
       if @response

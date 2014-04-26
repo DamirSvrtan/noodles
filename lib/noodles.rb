@@ -1,9 +1,9 @@
 require "noodles/version"
 require "noodles/utils"
-require "noodles/dependencies"
+# require "noodles/dependencies"
 require "noodles/controller"
 require "noodles/routing"
-require "noodles/file_model"
+# require "noodles/file_model"
 
 module Noodles
   class Application
