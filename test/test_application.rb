@@ -3,7 +3,7 @@ require_relative 'test_helper'
 class TestApp < Noodles::Application
 end
 
-class TestController < Noodles::Controller
+class TestController < Noodles::Http::Controller
   def index
     "hello"
   end
