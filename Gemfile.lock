@@ -5,14 +5,20 @@ PATH
       erubis
       multi_json
       rack
+      websocket-rack
 
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.3.6)
     coderay (1.1.0)
+    daemons (1.1.9)
+    em-websocket (0.3.8)
+      addressable (>= 2.1.1)
+      eventmachine (>= 0.12.9)
     erubis (2.7.0)
+    eventmachine (1.0.3)
     method_source (0.8.2)
-    minitest (4.0.0)
     multi_json (1.9.2)
     pry (0.9.12.6)
       coderay (~> 1.0)
@@ -23,13 +29,21 @@ GEM
       rack (>= 1.0)
     rake (10.3.1)
     slop (3.4.7)
+    thin (1.6.2)
+      daemons (>= 1.0.9)
+      eventmachine (>= 1.0.0)
+      rack (>= 1.0.0)
+    websocket-rack (0.4.0)
+      em-websocket (~> 0.3.6)
+      eventmachine (~> 1.0.0.beta.4)
+      rack
+      thin
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   bundler (~> 1.5)
-  minitest (~> 4.0.0)
   noodles!
   pry
   rack-test
