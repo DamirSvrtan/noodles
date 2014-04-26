@@ -9,15 +9,15 @@ class TestController < Noodles::Http::Controller
   end
 
   def show
-    render 'show'
+    render erb: 'show'
   end
 
   def with_response
     response("HELLOU",400)
   end
 
-  def rendering_path(view_name)
-    File.join 'test', 'views', "#{view_name}.html.erb"
+  def get_rendering_path(view_name, template_name)
+    File.join 'test', 'views', "#{view_name}.erb"
   end
 end
 
