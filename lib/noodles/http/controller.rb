@@ -1,5 +1,6 @@
 require 'erubis'
-
+require 'haml'
+require 'slim'
 module Noodles
   module Http
     class Controller
@@ -19,9 +20,12 @@ module Noodles
           template = File.read(filename)
           Erubis::Eruby.new(template).result(mapped_instance_variables)
         elsif template.has_key? :haml
-
+          filename = get_rendering_path template[:haml], :haml
+          template = File.read(filename)
+          Haml::Engine.new(template).render
         elsif template.has_key? :slim
-
+          filename = get_rendering_path template[:slim], :slim
+          Slim::Template.new(filename).render
         end
       end
 

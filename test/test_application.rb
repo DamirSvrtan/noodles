@@ -16,8 +16,16 @@ class TestController < Noodles::Http::Controller
     response("HELLOU",400)
   end
 
+  def index_with_slim
+    render slim: 'index'
+  end
+
+  def index_with_haml
+    render haml: 'index'
+  end
+
   def get_rendering_path(view_name, template_name)
-    File.join 'test', 'views', "#{view_name}.erb"
+    File.join 'test', 'views', "#{view_name}.#{template_name}"
   end
 end
 
@@ -48,6 +56,24 @@ class NoodlesTestApp < Test::Unit::TestCase
 
     assert last_response.ok?
     assert last_response.body["<h1>Show</h1>"]
+  end
+
+  def test_index_with_slim
+    get "/test/index_with_slim"
+
+    assert last_response.ok?
+    body = last_response.body
+    assert body["Hello"]
+    assert body["Hello Twice"]
+  end
+
+  def test_index_with_haml
+    get "/test/index_with_haml"
+
+    assert last_response.ok?
+    body = last_response.body
+    assert body["Hello"]
+    assert body["Hello Twice"]
   end
 
   def test_with_response
