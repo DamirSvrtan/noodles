@@ -6,7 +6,7 @@ module Noodles
     class Application
       def call(env)
         handler = get_handler(env)
-        handler.call(env)
+        handler.new.call(env)
       end
     end
   end
