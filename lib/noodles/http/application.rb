@@ -1,7 +1,5 @@
-require "noodles/http/utils"
 require "noodles/http/controller"
 require "noodles/http/routing"
-
 
 module Noodles
   module Http

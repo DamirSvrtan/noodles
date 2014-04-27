@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    noodles (0.0.2)
+    noodles (0.0.3)
       erubis
       multi_json
       rack
