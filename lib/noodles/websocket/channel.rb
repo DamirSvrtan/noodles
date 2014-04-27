@@ -12,7 +12,7 @@ module Noodles
 
       def self.broadcast(msg)
         connections.each do |connection|
-          connection.send msg
+          connection.send_data msg
         end
       end
 
