@@ -1,5 +1,6 @@
 require "noodles/websocket/routing"
 require "noodles/websocket/handler"
+require "noodles/websocket/channel"
 
 module Noodles
   module Websocket
