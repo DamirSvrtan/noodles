@@ -24,6 +24,18 @@ module Noodles
           connection.send_data msg
         end
       end
+
+      def request(env)
+        Rack::Request.new(env)
+      end
+
+      def params(env)
+        request(env).params
+      end
+
+      def connection_storage
+
+      end
     end
   end
 end
