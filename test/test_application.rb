@@ -115,4 +115,10 @@ class NoodlesTestApp < Test::Unit::TestCase
     body = last_response.body
     assert body["ANOTHER SUB APP"]
   end
+
+  def test_bad_request
+    get "/something-bad"
+
+    assert last_response.bad_request?
+  end
 end
