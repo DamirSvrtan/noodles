@@ -29,6 +29,24 @@ class TestController < Noodles::Http::Controller
     response("HELLOU",400)
   end
 
+  def with_variables_erb
+    @username = "Jack"
+    @hello_message = "HI!"
+    render erb: 'with_variables'
+  end
+
+  def with_variables_haml
+    @username = "Jack"
+    @hello_message = "HI!"
+    render haml: 'with_variables'
+  end
+
+  def with_variables_slim
+    @username = "Jack"
+    @hello_message = "HI!"
+    render slim: 'with_variables'
+  end
+
   def get_rendering_path(view_name, template_name)
     File.join 'test', 'views', "#{view_name}.#{template_name}"
   end
@@ -49,6 +67,9 @@ class NoodlesTestApp < Test::Unit::TestCase
       get "/test/with_response", "test#with_response"
       get "sub-app", proc { |env| [200, {}, [env['PATH_INFO']]] }
       get "sub-app2", proc { [200, {}, ['ANOTHER SUB APP']] }
+      get "with_variables_erb", "test#with_variables_erb"
+      get "with_variables_haml", "test#with_variables_haml"
+      get "with_variables_slim", "test#with_variables_slim"
     end
     app
   end
@@ -121,6 +142,33 @@ class NoodlesTestApp < Test::Unit::TestCase
     assert last_response.bad_request?
   end
 
+  def test_with_variables_erb
+    get 'with_variables_erb'
+
+    assert last_response.ok?
+    body = last_response.body
+    assert body["Jack"]
+    assert body["HI!"]
+  end
+
+  def test_with_variables_haml
+    get 'with_variables_haml'
+
+    assert last_response.ok?
+    body = last_response.body
+    binding.pry
+    assert body["Jack"]
+    assert body["HI!"]
+  end
+
+  def test_with_variables_erb
+    get 'with_variables_slim'
+
+    assert last_response.ok?
+    body = last_response.body
+    assert body["Jack"]
+    assert body["HI!"]
+  end
   def test_environment
     assert !Noodles.production?
     assert !Noodles.test?
