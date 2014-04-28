@@ -1,6 +1,9 @@
 module Noodles
   module Http
     class Router
+
+      attr_reader :routes
+
       def initialize
         @routes = []
       end
@@ -25,34 +28,33 @@ module Noodles
  
         regexp = regexp_parts.join("/")
         
-        @routes.push regexp: Regexp.new("^/#{regexp}$"),
-                     path_params: path_params, 
-                     destination: destination, 
-                     url: url
+        routes.push url: url, regexp: Regexp.new("^/#{regexp}$"),
+                    destination: destination, path_params: path_params
       end
       
-      def check_url(url)
-        @routes.each do |r|
-          data_match = r[:regexp].match(url)
+      def find_by_url(url)
+        routes.each do |route|
+          data_match = route[:regexp].match(url)
           if data_match
-            params = {}
-            r[:path_params].each_with_index do |path_param, index|
-              params[path_param] = data_match.captures[index]
+            path_params = {}
+            route[:path_params].each_with_index do |path_param, index|
+              path_params[path_param] = data_match.captures[index]
             end
-            return get_destination(r[:destination], params)
+            return get_destination(route[:destination], path_params)
           end   
         end
         nil
       end
  
-      def get_destination(destination, routing_params = {})
-        return destination if destination.respond_to?(:call)
-        if destination =~ /^([^#]+)#([^#]+)$/
-          name = $1.capitalize
-          cont = Object.const_get("#{name}Controller")
-          return cont.action($2, routing_params)
+      def get_destination(destination, path_params = {})
+        if destination.respond_to?(:call)
+          destination
+        else
+          controller_name, action = destination.split('#')
+          controller_name = controller_name.capitalize
+          controller = Object.const_get("#{controller_name}Controller")
+          controller.action(action, path_params)
         end
-        raise "No destination: #{destination.inspect}!"
       end
  
     end
@@ -64,20 +66,17 @@ module Noodles
   module Http
     class Application
       def route(&block)
-        @route_obj ||= Router.new
-        @route_obj.instance_eval(&block)
+        @router ||= Router.new
+        @router.instance_eval(&block)
       end
       
       def get_rack_app(env)
-        raise 'No routes!' unless @route_obj
-        @route_obj.check_url env['PATH_INFO']
+        if @router
+          @router.find_by_url env['PATH_INFO']
+        else
+          raise 'No routes!'
+        end
       end
-      # def get_controller_and_action(env)
-      #   _, controller, action, after = env['PATH_INFO'].split('/', 4)
-      #   controller = controller.capitalize
-      #   controller += 'Controller'
-      #   [Object.const_get(controller), action]
-      # end
     end
   end
 end
