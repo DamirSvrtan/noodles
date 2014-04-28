@@ -3,11 +3,19 @@ require "noodles/websocket/application"
 
 module Noodles
   class Application
+
+    attr_reader :http_app, :websocket_app
+
+    def initialize
+      @http_app = Noodles::Http::Application.new 
+      @websocket_app = Noodles::Websocket::Application.new
+    end
+
     def call(env)
       if env['HTTP_UPGRADE'] == "websocket"
-        Noodles::Websocket::Application.new.call(env)
+        @websocket_app.call(env)
       else
-        Noodles::Http::Application.new.call(env)
+        @http_app.call(env)
       end
     end
   end

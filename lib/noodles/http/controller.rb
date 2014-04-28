@@ -9,6 +9,7 @@ module Noodles
 
       def initialize(env)
         @env = env
+        @routing_params = {}
       end
 
       def render(template={})
@@ -29,6 +30,16 @@ module Noodles
         end
       end
 
+      def dispatch(action, routing_params = {})
+        @routing_params = routing_params
+        text = self.send(action)
+        [200, {'Content-Type' => 'text/html'}, [text].flatten]
+      end
+
+      def self.action(act, rp = {})
+        proc { |e| self.new(e).dispatch(act, rp) }
+      end
+
       def get_rendering_path(view_name, template_type)
         File.join 'app', 'views', controller_name, "#{view_name}.#{template_type}"
       end
@@ -38,7 +49,7 @@ module Noodles
       end
 
       def params
-        request.params
+        request.params.merge @routing_params
       end
 
       def response(body, status = 200, headers={})
