@@ -4,6 +4,11 @@ class TestApp < Noodles::Application
 end
 
 class TestController < Noodles::Http::Controller
+
+  def root_page
+    "Root Page"
+  end
+
   def index
     "hello"
   end
@@ -12,16 +17,16 @@ class TestController < Noodles::Http::Controller
     render erb: 'show'
   end
 
-  def with_response
-    response("HELLOU",400)
-  end
-
   def index_with_slim
     render slim: 'index'
   end
 
   def index_with_haml
     render haml: 'index'
+  end
+
+  def with_response
+    response("HELLOU",400)
   end
 
   def get_rendering_path(view_name, template_name)
@@ -34,25 +39,26 @@ class NoodlesTestApp < Test::Unit::TestCase
 
   def app
     app = TestApp.new
-    app.http_app.route do
-      match "test/index", "test#index"
-      match "test/show", "test#show"
-      match "test/index_with_slim", "test#index_with_slim"
-      match "test/index_with_haml", "test#index_with_haml"
-      match "pipa/:id/slavina/:slavina_id", "test#hamly"
-      match "/test/with_response", "test#with_response"
-      match "sub-app", proc { |env| [200, {}, [env['PATH_INFO']]] }
-      match "sub-app2", proc { [200, {}, ['ANOTHER SUB APP']] }
+    app.http_app.routes do
+      root_to "test#root_page"
+      get "test/index", "test#index"
+      get "test/show", "test#show"
+      get "test/index_with_slim", "test#index_with_slim"
+      get "test/index_with_haml", "test#index_with_haml"
+      get "pipa/:id/slavina/:slavina_id", "test#hamly"
+      get "/test/with_response", "test#with_response"
+      get "sub-app", proc { |env| [200, {}, [env['PATH_INFO']]] }
+      get "sub-app2", proc { [200, {}, ['ANOTHER SUB APP']] }
     end
     app
   end
 
   def test_root_request
-    # get "/"
+    get "/"
 
-    # assert last_response.ok?
-    # body = last_response.body
-    # assert body["Hello"]
+    assert last_response.ok?
+    body = last_response.body
+    assert body["Root Page"]
   end
 
   def test_index_request
