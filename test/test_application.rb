@@ -156,7 +156,6 @@ class NoodlesTestApp < Test::Unit::TestCase
 
     assert last_response.ok?
     body = last_response.body
-    binding.pry
     assert body["Jack"]
     assert body["HI!"]
   end
@@ -166,9 +165,11 @@ class NoodlesTestApp < Test::Unit::TestCase
 
     assert last_response.ok?
     body = last_response.body
+
     assert body["Jack"]
     assert body["HI!"]
   end
+
   def test_environment
     assert !Noodles.production?
     assert !Noodles.test?

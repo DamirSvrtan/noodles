@@ -23,10 +23,10 @@ module Noodles
         elsif template.has_key? :haml
           filename = get_rendering_path template[:haml], :haml
           template = File.read(filename)
-          Haml::Engine.new(template).render(mapped_instance_variables)
+          Haml::Engine.new(template).render(map_instance_variables_to_object)
         elsif template.has_key? :slim
           filename = get_rendering_path template[:slim], :slim
-          Slim::Template.new(filename).render
+          Slim::Template.new(filename).render(map_instance_variables_to_object)
         end
       end
 
@@ -77,6 +77,14 @@ module Noodles
 
         def mapped_instance_variables
           Hash[self.instance_variables.map {|var| [var, self.instance_variable_get(var)]}]
+        end
+
+        def map_instance_variables_to_object
+          new_object = Object.new
+          mapped_instance_variables.each do |k,v|
+            new_object.instance_variable_set k, v
+          end
+          new_object
         end
     end
   end
