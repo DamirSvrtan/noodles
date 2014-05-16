@@ -62,16 +62,14 @@ module Noodles
           regexp = regexp_parts.join("/")
           [regexp, path_params]
         end
-   
+
         def get_destination(destination, path_params = {})
-          if destination.respond_to?(:call)
-            destination
-          else
-            controller_name, action = destination.split('#')
-            controller_name = controller_name.capitalize
-            controller = Object.const_get("#{controller_name}Controller")
-            controller.action(action, path_params)
-          end
+          return destination if destination.respond_to?(:call)
+
+          controller_name, action = destination.split('#')
+          controller_name = controller_name.capitalize
+          controller = Object.const_get("#{controller_name}Controller")
+          controller.action(action, path_params)
         end
  
     end

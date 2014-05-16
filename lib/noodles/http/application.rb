@@ -31,8 +31,11 @@ module Noodles
           end
         end
 
-        def bad_request
-          [400, {'Content-Type' => 'text/html'}, []]
+        def bad_request(include_body=false)
+          body = if include_body
+            "<h1>404</h1>"
+          end
+          [400, {'Content-Type' => 'text/html'}, [body]]
         end
     end
   end
