@@ -12,7 +12,7 @@ module Noodles
         if rack_app = get_rack_app(env)
           rack_app.call(env)
         else
-          return bad_request
+          return bad_request(true)
         end
       end
 
