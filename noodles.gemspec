@@ -23,10 +23,11 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry"
 
 
-  spec.add_runtime_dependency "erubis"
-  spec.add_runtime_dependency "rack"
-  spec.add_runtime_dependency "websocket-rack"
-  spec.add_runtime_dependency "multi_json"
-  spec.add_runtime_dependency "slim"
-  spec.add_runtime_dependency "haml"
+  spec.add_runtime_dependency 'erubis'
+  spec.add_runtime_dependency 'rack'
+  spec.add_runtime_dependency 'websocket-rack'
+  spec.add_runtime_dependency 'multi_json'
+  spec.add_runtime_dependency 'slim'
+  spec.add_runtime_dependency 'haml'
+  spec.add_runtime_dependency 'thor'
 end
