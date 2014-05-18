@@ -56,7 +56,7 @@ class TestController < Noodles::Http::Controller
   end
 end
 
-class NoodlesTestApp < Test::Unit::TestCase
+class NoodlesTestApp < Minitest::Test
   include Rack::Test::Methods
 
   def app

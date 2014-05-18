@@ -1,5 +1,5 @@
 require 'rack/test'
-require 'test/unit'
+require 'minitest/autorun'
 require 'pry'
 
 this_dir = File.join(File.dirname(__FILE__), "..")

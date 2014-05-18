@@ -1,6 +1,6 @@
 require_relative 'test_helper'
 
-class NoodlesEnvironmentTest < Test::Unit::TestCase
+class NoodlesEnvironmentTest < Minitest::Test
   include Rack::Test::Methods
 
   def test_development
