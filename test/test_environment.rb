@@ -2,7 +2,7 @@ require_relative 'test_helper'
 
 class NoodlesEnvironmentTest < Minitest::Test
 
-  def test_development
+  def test_test_env
     assert Noodles.env.test?
     assert Noodles.env == :test
     assert Noodles.env == 'test'
