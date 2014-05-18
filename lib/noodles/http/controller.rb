@@ -42,6 +42,14 @@ module Noodles
         request.params.merge @routing_params
       end
 
+      def redirect(redirect_path, status=302)
+        @response.body = []
+        @response['Location'] = redirect_path
+        @response.status = status
+      end
+
+      alias_method :redirect_to, :redirect
+
       def self.action(action, routing_params)
         proc { |e| self.new(e).dispatch(action, routing_params) }
       end

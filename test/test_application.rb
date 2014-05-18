@@ -57,6 +57,10 @@ class TestController < Noodles::Http::Controller
     haml 'index'
   end
 
+  def redirecting_path
+    redirect 'test/index'
+  end
+
   private
 
     def get_rendering_path(view_name, template_name)
@@ -84,6 +88,7 @@ class NoodlesTestApp < Minitest::Test
       get "change_response_status_code", "test#change_response_status_code"
       get "cookie_setting", "test#cookie_setting"
       post "testing_post", "test#post_request"
+      get "redirecting_path", "test#redirecting_path"
     end
     app
   end
@@ -198,9 +203,15 @@ class NoodlesTestApp < Minitest::Test
 
   def test_cookie_setting
     get 'cookie_setting'
-
     assert last_response.headers['Set-Cookie'] == 'user_id=1'
   end
+
+  def test_redirecting_path
+    get 'redirecting_path'
+    assert last_response.status == 302
+    assert last_response['Location'] == "test/index"
+  end
+
 end
 
 
