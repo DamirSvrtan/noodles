@@ -188,3 +188,18 @@ class NoodlesTestApp < Minitest::Test
     assert last_response.status == 404
   end
 end
+
+
+class NoRouterTestApp < Minitest::Test
+  include Rack::Test::Methods
+
+  def app
+    app = TestApp.new
+  end
+
+  def test_no_routes
+    assert_raises Noodles::Http::NoRouterError do
+      get '/'
+    end
+  end
+end
