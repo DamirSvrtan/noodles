@@ -1,6 +1,8 @@
 # Noodles
 
 [![Build Status](https://travis-ci.org/DamirSvrtan/noodles.svg?branch=master)](https://travis-ci.org/DamirSvrtan/noodles)
+[![Dependency Status](https://gemnasium.com/DamirSvrtan/noodles.svg)](https://gemnasium.com/DamirSvrtan/noodles)
+[![Code Climate](https://codeclimate.com/github/DamirSvrtan/noodles.png)](https://codeclimate.com/github/DamirSvrtan/noodles)
 
 TODO: Write a gem description
 
