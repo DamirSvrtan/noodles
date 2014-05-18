@@ -1,5 +1,7 @@
 # Noodles
 
+[![Build Status](https://travis-ci.org/DamirSvrtan/noodles.svg?branch=master)](https://travis-ci.org/DamirSvrtan/noodles)
+
 TODO: Write a gem description
 
 ## Installation
