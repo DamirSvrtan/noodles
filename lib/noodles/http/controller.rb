@@ -41,34 +41,26 @@ module Noodles
         @response.body = [Slim::Template.new(filename).render(map_instance_variables_to_object)]
       end
 
-      def dispatch(action, routing_params)
-        @routing_params = routing_params
-        self.send(action)
-        @response.finish
+      def params
+        request.params.merge @routing_params
       end
 
       def self.action(action, routing_params)
         proc { |e| self.new(e).dispatch(action, routing_params) }
       end
 
-      def get_rendering_path(view_name, template_type)
-        File.join 'app', 'views', controller_name, "#{view_name}.#{template_type}"
-      end
-
-      def params
-        request.params.merge @routing_params
-      end
-
-      def get_response
-        @response
-      end
-
-      def render_response(*args)
-        response(render(*args))
+      def dispatch(action, routing_params)
+        @routing_params = routing_params
+        self.send(action)
+        @response.finish
       end
 
       private
-        
+
+        def get_rendering_path(view_name, template_type)
+          File.join 'app', 'views', controller_name, "#{view_name}.#{template_type}"
+        end
+
         def controller_name
           klass = self.class.to_s.gsub /Controller$/, ""
           Noodles.to_underscore klass
