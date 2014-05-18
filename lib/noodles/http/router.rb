@@ -17,18 +17,22 @@ module Noodles
         get('', destination)
       end
 
-      def find_by_url(url)
-        routes.each do |route|
-          data_match = route[:regexp].match(url)
-          if data_match
-            path_params = {}
-            route[:path_params].each_with_index do |path_param, index|
-              path_params[path_param] = data_match.captures[index]
-            end
-            return get_destination(route[:destination], path_params)
-          end   
+      def find_by_url(method, url)
+        method = method.downcase.to_sym
+
+        route = routes.find do |route|
+          route[:method] == method and route[:regexp].match(url)
         end
-        nil
+
+        return nil if route.nil?
+
+        data_match = route[:regexp].match(url)
+
+        path_params = {}
+        route[:path_params].each_with_index do |path_param, index|
+          path_params[path_param] = data_match.captures[index]
+        end
+        get_destination(route[:destination], path_params)
       end
 
       private

@@ -25,7 +25,7 @@ module Noodles
 
         def get_rack_app(env)
           if @router
-            @router.find_by_url env['PATH_INFO']
+            @router.find_by_url(env['REQUEST_METHOD'], env['PATH_INFO'])
           else
             raise 'No routes!'
           end

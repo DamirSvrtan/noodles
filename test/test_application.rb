@@ -47,6 +47,10 @@ class TestController < Noodles::Http::Controller
     render slim: 'with_variables'
   end
 
+  def post_request
+    render haml: 'index'
+  end
+
   def get_rendering_path(view_name, template_name)
     File.join 'test', 'views', "#{view_name}.#{template_name}"
   end
@@ -70,6 +74,7 @@ class NoodlesTestApp < Test::Unit::TestCase
       get "with_variables_erb", "test#with_variables_erb"
       get "with_variables_haml", "test#with_variables_haml"
       get "with_variables_slim", "test#with_variables_slim"
+      post "testing_post", "test#post_request"
     end
     app
   end
@@ -168,6 +173,18 @@ class NoodlesTestApp < Test::Unit::TestCase
 
     assert body["Jack"]
     assert body["HI!"]
+  end
+
+  def test_post_request
+    post 'testing_post'
+
+    assert last_response.ok?
+  end
+
+  def test_getting_a_post_request_should_return_bad_request
+    get 'testing_post'
+
+    assert last_response.bad_request?
   end
 
   def test_environment
