@@ -1,7 +1,6 @@
 require_relative 'test_helper'
 
 class NoodlesEnvironmentTest < Minitest::Test
-  include Rack::Test::Methods
 
   def test_development
     assert Noodles.env.development?
