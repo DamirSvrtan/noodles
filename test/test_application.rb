@@ -6,11 +6,11 @@ end
 class TestController < Noodles::Http::Controller
 
   def root_page
-    "Root Page"
+    text "Root Page"
   end
 
   def index
-    "hello"
+    text "hello"
   end
 
   def show
@@ -23,10 +23,6 @@ class TestController < Noodles::Http::Controller
 
   def index_with_haml
     haml 'index'
-  end
-
-  def with_response
-    response("HELLOU",400)
   end
 
   def with_variables_erb
@@ -45,6 +41,11 @@ class TestController < Noodles::Http::Controller
     @username = "Jack"
     @hello_message = "HI!"
     slim 'with_variables'
+  end
+
+  def change_response_status_code
+    response.status = 201
+    haml 'index'
   end
 
   def post_request
@@ -68,12 +69,12 @@ class NoodlesTestApp < Minitest::Test
       get "test/index_with_slim", "test#index_with_slim"
       get "test/index_with_haml", "test#index_with_haml"
       get "pipa/:id/slavina/:slavina_id", "test#hamly"
-      get "/test/with_response", "test#with_response"
       get "sub-app", proc { |env| [200, {}, [env['PATH_INFO']]] }
       get "sub-app2", proc { [200, {}, ['ANOTHER SUB APP']] }
       get "with_variables_erb", "test#with_variables_erb"
       get "with_variables_haml", "test#with_variables_haml"
       get "with_variables_slim", "test#with_variables_slim"
+      get "change_response_status_code", "test#change_response_status_code"
       post "testing_post", "test#post_request"
     end
     app
@@ -119,13 +120,6 @@ class NoodlesTestApp < Minitest::Test
     assert body["Hello Twice"]
   end
 
-  def xtest_with_response
-    get "/test/with_response"
-
-    assert last_response.bad_request?
-    assert last_response.body["HELLOU"]
-  end
-
   def test_sub_app
     get "/sub-app"
 
@@ -165,7 +159,7 @@ class NoodlesTestApp < Minitest::Test
     assert body["HI!"]
   end
 
-  def test_with_variables_erb
+  def test_with_variables_slim
     get 'with_variables_slim'
 
     assert last_response.ok?
@@ -173,6 +167,13 @@ class NoodlesTestApp < Minitest::Test
 
     assert body["Jack"]
     assert body["HI!"]
+  end
+
+
+  def test_change_response_status_code
+    get 'change_response_status_code'
+
+    assert last_response.status == 201
   end
 
   def test_post_request
