@@ -11,6 +11,14 @@ class NoodlesCLI < Thor
     end
   end
 
+  desc "start", "start the server"
+  option :port, aliases: :p
+  def start
+    basic_command =  "thin -R config.ru start"
+    basic_command << " -p #{options[:port]}" if options[:port]
+    `#{basic_command}`
+  end
+
   private
 
     def folders(app_name)
