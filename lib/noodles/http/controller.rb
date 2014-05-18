@@ -20,19 +20,16 @@ module Noodles
       end
 
       def html(template_name)
-        filename = get_rendering_path template_name, :html
-        @response.body = [File.read(filename)]
+        @response.body = [read_file(template_name, :html)]
       end
 
       def erb(template_name)
-        filename = get_rendering_path template_name, :erb
-        template = File.read(filename)
+        template = read_file template_name, :erb
         @response.body = [Erubis::Eruby.new(template).result(mapped_instance_variables)]
       end
 
       def haml(template_name)
-        filename = get_rendering_path template_name, :haml
-        template = File.read(filename)
+        template = read_file template_name, :haml
         @response.body = [Haml::Engine.new(template).render(map_instance_variables_to_object)]
       end
 
@@ -56,6 +53,10 @@ module Noodles
       end
 
       private
+
+        def read_file(view_name, template_type)
+          File.read get_rendering_path(view_name, template_type)
+        end
 
         def get_rendering_path(view_name, template_type)
           File.join 'app', 'views', controller_name, "#{view_name}.#{template_type}"
