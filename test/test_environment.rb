@@ -10,12 +10,12 @@ class NoodlesEnvironmentTest < Minitest::Test
   end
 
   def test_environment
-    assert !Noodles.env.production?
-    assert !Noodles.env.test?
+    refute Noodles.env.production?
+    refute Noodles.env.test?
     assert Noodles.env.development?
     ENV['RACK_ENV'] = "production"
     assert Noodles.env.production?
-    assert !Noodles.env.development?
+    refute Noodles.env.development?
     ENV['RACK_ENV'] = nil
   end
 end
