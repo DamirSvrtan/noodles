@@ -19,9 +19,10 @@ module Noodles
       end
 
       def ==(other)
-        if other.is_a? String
+        case other
+        when String
           environment.to_s == other
-        elsif other.is_a? Symbol
+        when Symbol
           environment.to_sym == other
         else
           super
