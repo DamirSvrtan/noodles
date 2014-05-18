@@ -14,15 +14,15 @@ class TestController < Noodles::Http::Controller
   end
 
   def show
-    render erb: 'show'
+    erb 'show'
   end
 
   def index_with_slim
-    render slim: 'index'
+    slim 'index'
   end
 
   def index_with_haml
-    render haml: 'index'
+    haml 'index'
   end
 
   def with_response
@@ -32,23 +32,23 @@ class TestController < Noodles::Http::Controller
   def with_variables_erb
     @username = "Jack"
     @hello_message = "HI!"
-    render erb: 'with_variables'
+    erb 'with_variables'
   end
 
   def with_variables_haml
     @username = "Jack"
     @hello_message = "HI!"
-    render haml: 'with_variables'
+    haml 'with_variables'
   end
 
   def with_variables_slim
     @username = "Jack"
     @hello_message = "HI!"
-    render slim: 'with_variables'
+    slim 'with_variables'
   end
 
   def post_request
-    render haml: 'index'
+    haml 'index'
   end
 
   def get_rendering_path(view_name, template_name)
@@ -144,7 +144,7 @@ class NoodlesTestApp < Minitest::Test
 
   def test_bad_request
     get "/something-bad"
-    assert last_response.bad_request?
+    assert last_response.status == 404
   end
 
   def test_with_variables_erb
@@ -184,6 +184,6 @@ class NoodlesTestApp < Minitest::Test
   def test_getting_a_post_request_should_return_bad_request
     get 'testing_post'
 
-    assert last_response.bad_request?
+    assert last_response.status == 404
   end
 end

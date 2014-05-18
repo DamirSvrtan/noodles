@@ -24,7 +24,7 @@ module Noodles
           route[:method] == method and route[:regexp].match(url)
         end
 
-        return nil if route.nil?
+        return if route.nil?
 
         data_match = route[:regexp].match(url)
 

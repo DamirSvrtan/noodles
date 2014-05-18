@@ -5,47 +5,48 @@ module Noodles
   module Http
     class Controller
 
-      attr_reader :env
+      attr_reader :env, :request
 
       def initialize(env)
         @env = env
         @routing_params = {}
+        @request = Rack::Request.new(env)
       end
 
-      def render(template={})
-        if template.has_key? :html
-          filename = get_rendering_path template[:html], :html
-          File.read(filename)
-        elsif template.has_key? :erb
-          filename = get_rendering_path template[:erb], :erb
-          template = File.read(filename)
-          Erubis::Eruby.new(template).result(mapped_instance_variables)
-        elsif template.has_key? :haml
-          filename = get_rendering_path template[:haml], :haml
-          template = File.read(filename)
-          Haml::Engine.new(template).render(map_instance_variables_to_object)
-        elsif template.has_key? :slim
-          filename = get_rendering_path template[:slim], :slim
-          Slim::Template.new(filename).render(map_instance_variables_to_object)
-        end
+      def html(template_name)
+        filename = get_rendering_path template_name, :html
+        File.read(filename)
       end
 
-      def dispatch(action, routing_params = {})
+      def erb(template_name)
+        filename = get_rendering_path template_name, :erb
+        template = File.read(filename)
+        Erubis::Eruby.new(template).result(mapped_instance_variables)
+      end
+
+      def haml(template_name)
+        filename = get_rendering_path template_name, :haml
+        template = File.read(filename)
+        Haml::Engine.new(template).render(map_instance_variables_to_object)
+      end
+
+      def slim(template_name)
+        filename = get_rendering_path template_name, :slim
+        Slim::Template.new(filename).render(map_instance_variables_to_object)
+      end
+
+      def dispatch(action, routing_params)
         @routing_params = routing_params
         text = self.send(action)
         [200, {'Content-Type' => 'text/html'}, [text].flatten]
       end
 
-      def self.action(act, rp = {})
-        proc { |e| self.new(e).dispatch(act, rp) }
+      def self.action(action, routing_params)
+        proc { |e| self.new(e).dispatch(action, routing_params) }
       end
 
       def get_rendering_path(view_name, template_type)
         File.join 'app', 'views', controller_name, "#{view_name}.#{template_type}"
-      end
-
-      def request
-        @request ||= Rack::Request.new(env)
       end
 
       def params
