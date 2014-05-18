@@ -186,13 +186,4 @@ class NoodlesTestApp < Test::Unit::TestCase
 
     assert last_response.bad_request?
   end
-
-  def test_environment
-    assert !Noodles.production?
-    assert !Noodles.test?
-    assert Noodles.development?
-    ENV['RACK_ENV'] = "production"
-    assert Noodles.production?
-    assert !Noodles.development?
-  end
 end
