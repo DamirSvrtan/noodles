@@ -5,10 +5,6 @@ module Noodles
   module Http
     class Application
       def call(env)
-        if env['PATH_INFO'] == '/favicon.ico'
-          return bad_request
-        end
-
         if rack_app = get_rack_app(env)
           rack_app.call(env)
         else
