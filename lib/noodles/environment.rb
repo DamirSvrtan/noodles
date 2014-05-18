@@ -18,6 +18,10 @@ module Noodles
         environment
       end
 
+      def to_s
+        environment
+      end
+
       def ==(other)
         case other
         when String
