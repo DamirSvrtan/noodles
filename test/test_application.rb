@@ -52,9 +52,16 @@ class TestController < Noodles::Http::Controller
     haml 'index'
   end
 
-  def get_rendering_path(view_name, template_name)
-    File.join 'test', 'views', "#{view_name}.#{template_name}"
+  def cookie_setting
+    response.set_cookie "user_id", 1
+    haml 'index'
   end
+
+  private
+
+    def get_rendering_path(view_name, template_name)
+      File.join 'test', 'views', "#{view_name}.#{template_name}"
+    end
 end
 
 class NoodlesTestApp < Minitest::Test
@@ -75,6 +82,7 @@ class NoodlesTestApp < Minitest::Test
       get "with_variables_haml", "test#with_variables_haml"
       get "with_variables_slim", "test#with_variables_slim"
       get "change_response_status_code", "test#change_response_status_code"
+      get "cookie_setting", "test#cookie_setting"
       post "testing_post", "test#post_request"
     end
     app
@@ -186,6 +194,12 @@ class NoodlesTestApp < Minitest::Test
     get 'testing_post'
 
     assert last_response.status == 404
+  end
+
+  def test_cookie_setting
+    get 'cookie_setting'
+
+    assert last_response.headers['Set-Cookie'] == 'user_id=1'
   end
 end
 
