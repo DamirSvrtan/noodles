@@ -1,1 +1,3 @@
-script: "ruby test/test_application.rb"
+language: ruby
+rvm:
+  - 2.0.0
