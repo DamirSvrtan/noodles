@@ -3,20 +3,21 @@ require_relative 'test_helper'
 class NoodlesEnvironmentTest < Minitest::Test
 
   def test_development
-    assert Noodles.env.development?, "Environmet is: #{Noodles.env}"
-    assert Noodles.env == :development, "Environmet is: #{Noodles.env}"
-    assert Noodles.env == 'development', "Environmet is: #{Noodles.env}"
-    assert Noodles.env.to_s == 'development', "Environmet is: #{Noodles.env}"
-    assert "Test environment is #{Noodles.env}", "Test environment is development"
+    assert Noodles.env.test?
+    assert Noodles.env == :test
+    assert Noodles.env == 'test'
+    assert Noodles.env.to_s == 'test'
+    assert "Noodles environment is #{Noodles.env}", "Noodles environment is test"
   end
 
   def test_environment
-    refute Noodles.env.production?, "Environmet is: #{Noodles.env}"
-    refute Noodles.env.test?, "Environmet is: #{Noodles.env}"
-    assert Noodles.env.development?, "Environmet is: #{Noodles.env}"
+    assert Noodles.env.test?
+    refute Noodles.env.production?
+    refute Noodles.env.development?
     ENV['RACK_ENV'] = "production"
-    assert Noodles.env.production?, "Environmet is: #{Noodles.env}"
-    refute Noodles.env.development?, "Environmet is: #{Noodles.env}"
-    ENV['RACK_ENV'] = nil
+    assert Noodles.env.production?
+    refute Noodles.env.development?
+    refute Noodles.env.test?
+    ENV['RACK_ENV'] = 'test'
   end
 end
