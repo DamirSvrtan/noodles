@@ -1,11 +1,2 @@
-require 'thor'
-
-class NoodlesCLI < Thor
-  
-  desc "new app_name", "creates a boilerplate Noodles folder structure"
-  def new(app_name)
-    FileUtils.mkdir(app_name)
-  end
-end
-
+require_relative '../cli/noodles_cli'
 NoodlesCLI.start(ARGV)
