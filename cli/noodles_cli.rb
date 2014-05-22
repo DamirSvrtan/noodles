@@ -29,7 +29,7 @@ class NoodlesCLI < Thor
         File.join("app", "controllers"),
         File.join("app", "handlers"),
         File.join("app", "views"),
-        File.join("app", "templates")
+        File.join("app", "templates"),
         File.join("public", "css"),
         File.join("public", "images"),
         File.join("public", "js"),
