@@ -1,52 +1,23 @@
 require 'thor'
 require 'pry'
 require 'find'
+require 'colorize'
 
 class NoodlesCLI < Thor
   desc "new app_name", "creates a boilerplate Noodles folder structure"
   def new(app_name)
-    # FileUtils.mkdir(app_name, verbose: true)
     template_path = Pathname.new File.expand_path('../template', __FILE__)
-    # wildcard_path = Pathname.new File.join(template_path, "**", "**")
 
-
-    # puts all_files
-    # binding.pry
     all_paths = Find.find(template_path).map {|path| Pathname.new(path)}
+    all_paths = all_paths[1..-1] # remove '.'
 
-    all_paths = all_paths[1..-1]
-    # first_path = all_paths.first
+    create_dir(app_name)
 
-    command_line_path = FileUtils.pwd
-
-    # binding.pry
-
-    # puts __FILE__
-    # temp_path = Pathname.new(template_path)
-
-    FileUtils.mkdir(app_name, verbose: true)
-
-    all_paths.each do |path|
-      # puts path.directory?
-      rel_path = path.relative_path_from(template_path).to_s
+    all_paths.each do |abs_path|
+      rel_path = abs_path.relative_path_from(template_path).to_s
       rel_path = File.join app_name, rel_path
-      # FileUtils.cd(app_name) do
-      if path.directory?
-        FileUtils.mkdir(rel_path, verbose: true)
-      else
-        File.open(rel_path, 'w') {|file| file.write(File.read(path))}
-      end
-      # end
-
-      # puts rel_path
-      # rel_path
+      create_file_or_dir(abs_path, rel_path)
     end
-    # binding.pry
-    # FileUtils.cd(app_name) do
-    #   folders(app_name).each do |folder|
-    #     FileUtils.mkdir(folder,verbose: true)
-    #   end
-    # end
   end
 
   desc "start", "start the server"
@@ -59,18 +30,30 @@ class NoodlesCLI < Thor
 
   private
 
-    def folders(app_name)
-      [
-        File.join("app"),
-        File.join("config"),
-        File.join("public"),
-        File.join("app", "controllers"),
-        File.join("app", "handlers"),
-        File.join("app", "views"),
-        File.join("app", "templates"),
-        File.join("public", "css"),
-        File.join("public", "images"),
-        File.join("public", "js"),
-      ]
+    def create_file_or_dir(abs_path, rel_path)
+      if abs_path.directory?
+        create_dir(rel_path)
+      else
+        create_file(abs_path, rel_path)
+      end
+    end
+
+    def create_dir(rel_path)
+      FileUtils.mkdir(rel_path)
+      echo(:mkdir, rel_path)
+    end
+
+    def create_file(abs_path, rel_path)
+      File.open(rel_path, 'w') {|file| file.write(File.read(abs_path))}
+      echo(:create, rel_path)
+    end
+
+    def echo(action, rel_path)
+      line = "#{adjust(action).colorize(:green).bold} #{rel_path}"
+      puts line
+    end
+
+    def adjust(action)
+      action.to_s.rjust(8, " ")
     end
 end

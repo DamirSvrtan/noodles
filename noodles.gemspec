@@ -32,4 +32,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'slim'
   spec.add_runtime_dependency 'haml'
   spec.add_runtime_dependency 'tilt'
+
+  spec.add_runtime_dependency 'colorize'
 end
