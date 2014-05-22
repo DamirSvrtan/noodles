@@ -4,6 +4,8 @@ require 'find'
 require 'colorize'
 
 class NoodlesCLI < Thor
+  include Thor::Actions
+
   desc "new app_name", "creates a boilerplate Noodles folder structure"
   def new(app_name)
     template_path = Pathname.new File.expand_path('../template', __FILE__)
@@ -18,6 +20,7 @@ class NoodlesCLI < Thor
       rel_path = File.join app_name, rel_path
       create_file_or_dir(abs_path, rel_path)
     end
+    run "cd #{app_name} && bundle install"
   end
 
   desc "start", "start the server"
