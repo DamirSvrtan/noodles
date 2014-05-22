@@ -21,8 +21,8 @@ class NoodlesCLI < Thor
       create_file_or_dir(abs_path, rel_path)
     end
 
-    echo(:run, 'bundle install')
-    run "cd #{app_name} && bundle install", verbose: false
+    bundle_install(app_name)
+    git_init(app_name)
   end
 
   desc "start", "start the server"
@@ -64,5 +64,15 @@ class NoodlesCLI < Thor
 
     def adjust(action)
       action.to_s.rjust(8, " ")
+    end
+
+    def bundle_install(app_name)
+      echo(:run, 'bundle install')
+      run "cd #{app_name} && bundle install", verbose: false
+    end
+
+    def git_init(app_name)
+      echo(:run, 'git init')
+      run "cd #{app_name} && git init", verbose: false
     end
 end
