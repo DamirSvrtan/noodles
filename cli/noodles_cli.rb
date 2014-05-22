@@ -20,7 +20,9 @@ class NoodlesCLI < Thor
       rel_path = File.join app_name, rel_path
       create_file_or_dir(abs_path, rel_path)
     end
-    run "cd #{app_name} && bundle install"
+
+    echo(:run, 'bundle install')
+    run "cd #{app_name} && bundle install", verbose: false
   end
 
   desc "start", "start the server"
@@ -28,7 +30,7 @@ class NoodlesCLI < Thor
   def start
     basic_command =  "thin -R config.ru start"
     basic_command << " -p #{options[:port]}" if options[:port]
-    `#{basic_command}`
+    run basic_command, verbose: false
   end
 
   private
@@ -51,8 +53,8 @@ class NoodlesCLI < Thor
       echo(:create, rel_path)
     end
 
-    def echo(action, rel_path)
-      line = "#{adjust(action).colorize(:green).bold} #{rel_path}"
+    def echo(action, subject)
+      line = "#{adjust(action).colorize(:green).bold} #{subject}"
       puts line
     end
 
