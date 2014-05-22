@@ -28,9 +28,13 @@ class NoodlesCLI < Thor
   desc "start", "start the server"
   option :port, aliases: :p
   def start
-    basic_command =  "thin -R config.ru start"
-    basic_command << " -p #{options[:port]}" if options[:port]
-    run basic_command, verbose: false
+    if File.exist?('config.ru')
+      basic_command =  "thin -R config.ru start"
+      basic_command << " -p #{options[:port]}" if options[:port]
+      run basic_command, verbose: false
+    else
+      puts "No config.ru file present."
+    end
   end
 
   private
