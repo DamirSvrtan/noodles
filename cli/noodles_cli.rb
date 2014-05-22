@@ -72,7 +72,9 @@ class NoodlesCLI < Thor
     end
 
     def git_init(app_name)
-      echo(:run, 'git init')
-      run "cd #{app_name} && git init", verbose: false
+      unless `which git`.empty?
+        echo(:run, 'git init')
+        run "cd #{app_name} && git init", verbose: false
+      end
     end
 end
