@@ -3,7 +3,18 @@ require_relative 'test_helper'
 class TestApp < Noodles::Application
 end
 
+module NoodleCurrent
+  def current_user
+    "Damir"
+  end
+end
+
+class NoodleView
+  include NoodleCurrent
+end
+
 class TestController < Noodles::Http::Controller
+  view NoodleView
 
   def root_page
     text "Root Page"
@@ -24,6 +35,18 @@ class TestController < Noodles::Http::Controller
   def index_with_haml
     haml 'index'
   end
+
+  def with_current_user
+    erb 'current_user_temp'
+  end
+
+  def with_current_user_haml
+    haml 'current_user_temp'
+  end  
+
+  def with_current_user_slim
+    slim 'current_user_temp'
+  end  
 
   def with_variables_erb
     @username = "Jack"
@@ -64,7 +87,7 @@ class TestController < Noodles::Http::Controller
   private
 
     def get_rendering_path(view_name, template_name)
-      File.join 'test', 'views', "#{view_name}.#{template_name}"
+      File.join 'test', 'templates', "#{view_name}.#{template_name}"
     end
 end
 
@@ -89,6 +112,9 @@ class NoodlesTestApp < Minitest::Test
       get "cookie_setting", "test#cookie_setting"
       post "testing_post", "test#post_request"
       get "redirecting_path", "test#redirecting_path"
+      get 'with_current_user', "test#with_current_user"
+      get 'with_current_user_slim', "test#with_current_user_slim"
+      get 'with_current_user_haml', "test#with_current_user_haml"
     end
     app
   end
@@ -212,6 +238,23 @@ class NoodlesTestApp < Minitest::Test
     assert last_response['Location'] == "test/index"
   end
 
+  def test_with_current_user
+    get 'with_current_user'
+    assert last_response.ok?
+    assert last_response.body['Damir']
+  end
+
+  def test_with_current_user_slim
+    get 'with_current_user_slim'
+    assert last_response.ok?
+    assert last_response.body['Damir']
+  end
+
+  def test_with_current_user_haml
+    get 'with_current_user_haml'
+    assert last_response.ok?
+    assert last_response.body['Damir']
+  end
 end
 
 

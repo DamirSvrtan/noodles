@@ -1,6 +1,10 @@
+require 'noodles/http/view'
 require 'erubis'
 require 'haml'
 require 'slim'
+require 'tilt/erubis'
+require 'tilt/haml'
+
 module Noodles
   module Http
     class Controller
@@ -24,18 +28,20 @@ module Noodles
       end
 
       def erb(template_name)
-        template = read_file template_name, :erb
-        @response.body = [Erubis::Eruby.new(template).result(mapped_instance_variables)]
+        filename = get_rendering_path template_name, :erb
+        # template = read_file template_name, :erb
+        @response.body = [Tilt.new(filename).render(map_instance_variables_to_object)]
       end
 
       def haml(template_name)
-        template = read_file template_name, :haml
-        @response.body = [Haml::Engine.new(template).render(map_instance_variables_to_object)]
+        filename = get_rendering_path template_name, :haml
+        # template = read_file template_name, :haml
+        @response.body = [Tilt.new(filename).render(map_instance_variables_to_object)]
       end
 
       def slim(template_name)
         filename = get_rendering_path template_name, :slim
-        @response.body = [Slim::Template.new(filename).render(map_instance_variables_to_object)]
+        @response.body = [Tilt.new(filename).render(map_instance_variables_to_object)]
       end
 
       def params
@@ -60,14 +66,26 @@ module Noodles
         @response.finish
       end
 
+      def self.view(view)
+        @@view = view
+      end
+
+      def view_clazz
+        if defined? @@view
+          @@view
+        else
+          View
+        end
+      end
+
       private
 
-        def read_file(view_name, template_type)
-          File.read get_rendering_path(view_name, template_type)
+        def read_file(template_name, template_type)
+          File.read get_rendering_path(template_name, template_type)
         end
 
-        def get_rendering_path(view_name, template_type)
-          File.join 'app', 'views', controller_name, "#{view_name}.#{template_type}"
+        def get_rendering_path(template_name, template_type)
+          File.join 'app', 'templates', controller_name, "#{template_name}.#{template_type}"
         end
 
         def controller_name
@@ -80,7 +98,7 @@ module Noodles
         end
 
         def map_instance_variables_to_object
-          new_object = Object.new
+          new_object = view_clazz.new
           mapped_instance_variables.each do |k,v|
             new_object.instance_variable_set k, v
           end
