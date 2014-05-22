@@ -1,9 +1,7 @@
 require 'noodles/http/view'
-require 'erubis'
-require 'haml'
-require 'slim'
 require 'tilt/erubis'
 require 'tilt/haml'
+require 'slim'
 
 module Noodles
   module Http
@@ -27,21 +25,11 @@ module Noodles
         @response.body = [read_file(template_name, :html)]
       end
 
-      def erb(template_name)
-        filename = get_rendering_path template_name, :erb
-        # template = read_file template_name, :erb
-        @response.body = [Tilt.new(filename).render(map_instance_variables_to_object)]
-      end
-
-      def haml(template_name)
-        filename = get_rendering_path template_name, :haml
-        # template = read_file template_name, :haml
-        @response.body = [Tilt.new(filename).render(map_instance_variables_to_object)]
-      end
-
-      def slim(template_name)
-        filename = get_rendering_path template_name, :slim
-        @response.body = [Tilt.new(filename).render(map_instance_variables_to_object)]
+      [:erb, :haml, :slim].each do |template_engine|
+        define_method template_engine do |template_name|
+          filename = get_rendering_path(template_name, template_engine)
+          @response.body = [Tilt.new(filename).render(map_instance_variables_to_object)]
+        end
       end
 
       def params
