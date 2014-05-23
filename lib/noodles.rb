@@ -39,8 +39,15 @@ module Noodles
 
     def cache
      return @@cache if defined? @@cache
-     options = { namespace: "noodle_app", compress: true }
+     namespace = cache_store_name || 'noodle_app'
+     options = { namespace: namespace, compress: true }
      @@cache = Cache.new('localhost:11211', options)
     end
+
+    def setup
+      yield self
+    end
+
+    attr_accessor :cache_store_name
   end
 end
