@@ -1,5 +1,6 @@
 require "noodles/http/application"
 require "noodles/websocket/application"
+require 'yaml'
 
 module Noodles
   class Application
