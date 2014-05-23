@@ -34,4 +34,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'tilt'
 
   spec.add_runtime_dependency 'colorize'
+  spec.add_runtime_dependency 'dalli'
 end

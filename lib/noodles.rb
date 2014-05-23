@@ -3,6 +3,7 @@ require 'noodles/version'
 require 'noodles/utils'
 require 'noodles/application'
 require 'noodles/environment'
+require 'noodles/cache'
 require 'multi_json'
 
 module Noodles
@@ -34,6 +35,12 @@ module Noodles
 
     def secrets_path
       File.join('config', 'secrets.yml')
+    end
+
+    def cache
+     return @@cache if defined? @@cache
+     options = { namespace: "noodle_app", compress: true }
+     @@cache = Cache.new('localhost:11211', options)
     end
   end
 end
