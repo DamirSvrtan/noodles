@@ -18,5 +18,15 @@ module Noodles
         @http_app.call(env)
       end
     end
+
+    def secrets
+      rendered_string = Erubis::Eruby.new(File.read(secrets_path)).result
+      secrets_hash = YAML.load(rendered_string)[Noodles.env.to_s]
+      OpenStruct.new(secrets_hash)
+    end
+
+    def secrets_path
+      File.join('config', 'secrets.yml')
+    end
   end
 end
