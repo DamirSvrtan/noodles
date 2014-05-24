@@ -1,5 +1,13 @@
 require_relative 'test_helper'
 
+Noodles.cache_store_name = 'testing_cache'
+
+describe Minitest::Spec do
+  after do
+    Noodles.cache.flush
+  end
+end
+
 class SecretsTest < Minitest::Test
 
   def test_cache_set
