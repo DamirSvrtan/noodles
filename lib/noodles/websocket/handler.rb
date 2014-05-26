@@ -26,7 +26,7 @@ module Noodles
       end
 
       def broadcast_but_self msg
-        [@@connections - self].each do |connection|
+        (@@connections - [self]).each do |connection|
           connection.send_data msg
         end
       end
