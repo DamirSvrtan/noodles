@@ -8,6 +8,10 @@ TODO: Write a gem description
 
 ## Installation
 
+Start memcached:
+
+    memcached -l localhost
+
 Add this line to your application's Gemfile:
 
     gem 'noodles'
