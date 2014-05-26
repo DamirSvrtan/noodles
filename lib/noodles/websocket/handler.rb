@@ -25,6 +25,12 @@ module Noodles
         end
       end
 
+      def broadcast_but_self msg
+        [@@connections - self].each do |connection|
+          connection.send_data msg
+        end
+      end
+
       def request(env)
         Rack::Request.new(env)
       end
