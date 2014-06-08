@@ -22,6 +22,10 @@ module Noodles
         environment
       end
 
+      def to_sym
+        environment.to_sym
+      end
+
       def ==(other)
         case other
         when String

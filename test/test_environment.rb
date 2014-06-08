@@ -7,6 +7,7 @@ class NoodlesEnvironmentTest < Minitest::Test
     assert Noodles.env == :test
     assert Noodles.env == 'test'
     assert Noodles.env.to_s == 'test'
+    assert Noodles.env.to_sym == :test
     assert "Noodles environment is #{Noodles.env}", "Noodles environment is test"
   end
 
