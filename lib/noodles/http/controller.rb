@@ -25,6 +25,14 @@ module Noodles
         @response.body = [read_file(template_name, :html)]
       end
 
+      def json(jsonized_response)
+        @response['Content-Type'] = 'application/json'
+        unless jsonized_response.is_a? String
+          jsonized_response = jsonized_response.to_json
+        end
+        @response.body = [jsonized_response]
+      end
+
       [:erb, :haml, :slim].each do |template_engine|
         define_method template_engine do |template_name|
           filename = get_rendering_path(template_name, template_engine)

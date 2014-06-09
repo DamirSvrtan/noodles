@@ -84,6 +84,10 @@ class TestController < Noodles::Http::Controller
     redirect 'test/index'
   end
 
+  def json_response
+    json({ username: "Jack", sex: "M" })
+  end
+
   private
 
     def get_rendering_path(view_name, template_name)
@@ -115,6 +119,7 @@ class NoodlesTestApp < Minitest::Test
       get 'with_current_user', "test#with_current_user"
       get 'with_current_user_slim', "test#with_current_user_slim"
       get 'with_current_user_haml', "test#with_current_user_haml"
+      get 'json_response', 'test#json_response'
     end
     app
   end
@@ -255,6 +260,16 @@ class NoodlesTestApp < Minitest::Test
     assert last_response.ok?
     assert last_response.body['Damir']
   end
+
+  def test_json_response
+    get 'json_response'
+    assert last_response.ok?
+    body = last_response.body
+    body_hash = JSON.parse(body)
+    assert_equal "Jack", body_hash['username']
+    assert_equal "M", body_hash['sex']
+  end
+
 end
 
 
