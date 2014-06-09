@@ -1,6 +1,7 @@
 require 'thor'
 require 'pry'
 require 'find'
+require 'irb'
 require 'colorize'
 
 class NoodlesCLI < Thor
@@ -34,6 +35,16 @@ class NoodlesCLI < Thor
       run basic_command, verbose: false
     else
       puts "No config.ru file present."
+    end
+  end
+
+  desc "console", "starts the interactive console"
+  def console
+    if File.exist?('config/init.rb')
+      require 'config/init.rb'
+      Pry.start
+    else
+      puts "No config/init.rb file present."
     end
   end
 
