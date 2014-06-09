@@ -40,8 +40,9 @@ class NoodlesCLI < Thor
 
   desc "console", "starts the interactive console"
   def console
-    if File.exist?('config/init.rb')
-      require 'config/init.rb'
+    init_path = File.expand_path "config/init.rb"
+    if File.exist?(init_path)
+      require init_path
       Pry.start
     else
       puts "No config/init.rb file present."
