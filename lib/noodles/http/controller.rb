@@ -7,13 +7,14 @@ module Noodles
   module Http
     class Controller
 
-      attr_reader :env, :request, :response
+      attr_reader :env, :request, :response, :session
 
       def initialize(env)
         @env = env
         @routing_params = {}
         @request = Rack::Request.new(env)
         @response = Rack::Response.new([], 200, {'Content-Type' => 'text/html'})
+        @session = @env['rack.session']
       end
 
       def text(textual_response)
