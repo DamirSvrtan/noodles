@@ -80,6 +80,11 @@ class TestController < Noodles::Http::Controller
     haml 'index'
   end
 
+  def cookie_deletion
+    response.delete_cookie 'user_id'
+    haml 'index'
+  end
+
   def redirecting_path
     redirect 'test/index'
   end
@@ -114,6 +119,7 @@ class NoodlesTestApp < Minitest::Test
       get "with_variables_slim", "test#with_variables_slim"
       get "change_response_status_code", "test#change_response_status_code"
       get "cookie_setting", "test#cookie_setting"
+      get "cookie_deletion", "test#cookie_deletion"
       post "testing_post", "test#post_request"
       get "redirecting_path", "test#redirecting_path"
       get 'with_current_user', "test#with_current_user"
@@ -235,6 +241,11 @@ class NoodlesTestApp < Minitest::Test
   def test_cookie_setting
     get 'cookie_setting'
     assert last_response.headers['Set-Cookie'] == 'user_id=1'
+  end
+
+  def test_cookie_deletion
+    get 'cookie_deletion'
+    assert last_response.headers['Set-Cookie'] =~ /user_id=; max-age=0;/
   end
 
   def test_redirecting_path
