@@ -10,13 +10,13 @@ module Noodles
       #   @websocket_handler.instance_variable_get("@connection")
       # end
 
-      def add_connection handler
-        @@connections << handler
+      def register_connection!
+        @@connections << self
       end
 
 
-      def remove_connection handler
-        @@connections.delete handler
+      def unregister_connection!
+        @@connections.delete self
       end
 
       def broadcast msg
