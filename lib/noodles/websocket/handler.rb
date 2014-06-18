@@ -6,10 +6,6 @@ module Noodles
 
       @@connections ||= []
 
-      # def connection
-      #   @websocket_handler.instance_variable_get("@connection")
-      # end
-
       def register_connection!
         @@connections << self
       end
@@ -18,6 +14,8 @@ module Noodles
       def unregister_connection!
         @@connections.delete self
       end
+
+      alias_method :deregister_method!, :unregister_connection!
 
       def broadcast msg
         @@connections.each do |connection|
@@ -37,10 +35,6 @@ module Noodles
 
       def params(env)
         request(env).params
-      end
-
-      def connection_storage
-
       end
     end
   end
