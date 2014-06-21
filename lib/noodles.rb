@@ -4,6 +4,7 @@ require 'noodles/utils'
 require 'noodles/application'
 require 'noodles/environment'
 require 'noodles/cache'
+require 'noodles/memcached_session'
 require 'multi_json'
 
 module Noodles
@@ -48,6 +49,6 @@ module Noodles
       yield self
     end
 
-    attr_accessor :cache_store_name
+    attr_accessor :cache_store_name, :use_memached_as_session_storage
   end
 end

@@ -10,7 +10,6 @@ module Noodles
         @@connections << self
       end
 
-
       def unregister_connection!
         @@connections.delete self
       end
@@ -35,6 +34,10 @@ module Noodles
 
       def params(env)
         request(env).params
+      end
+
+      def session
+        @session
       end
     end
   end
