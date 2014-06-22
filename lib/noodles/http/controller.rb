@@ -1,4 +1,5 @@
 require 'noodles/http/view'
+require 'noodles/sessionable'
 require 'tilt/erubis'
 require 'tilt/haml'
 require 'slim'
@@ -6,15 +7,15 @@ require 'slim'
 module Noodles
   module Http
     class Controller
+      include Noodles::Sessionable
 
-      attr_reader :env, :request, :response, :session
+      attr_reader :env, :request, :response
 
       def initialize(env)
         @env = env
         @routing_params = {}
         @request = Rack::Request.new(env)
         @response = Rack::Response.new([], 200, {'Content-Type' => 'text/html'})
-        @session = Noodles.use_memached_as_session_storage ? Noodles::MemcachedSession.new(env) : @env['rack.session']
       end
 
       def text(textual_response)
@@ -95,6 +96,7 @@ module Noodles
         end
 
         def map_instance_variables_to_object
+          view_clazz.send :include, Noodles::Sessionable
           new_object = view_clazz.new
           mapped_instance_variables.each do |k,v|
             new_object.instance_variable_set k, v

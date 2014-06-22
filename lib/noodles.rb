@@ -4,7 +4,6 @@ require 'noodles/utils'
 require 'noodles/application'
 require 'noodles/environment'
 require 'noodles/cache'
-require 'noodles/memcached_session'
 require 'multi_json'
 
 module Noodles

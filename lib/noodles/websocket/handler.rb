@@ -1,8 +1,10 @@
 require 'rack/websocket'
+require 'noodles/sessionable'
 
 module Noodles
   module Websocket
     class Handler < Rack::WebSocket::Application
+      include Noodles::Sessionable
 
       @@connections ||= []
 
@@ -34,10 +36,6 @@ module Noodles
 
       def params(env)
         request(env).params
-      end
-
-      def session
-        @session
       end
     end
   end
